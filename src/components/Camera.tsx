@@ -138,7 +138,6 @@ function Camera({ onCapture, onBack }: CameraProps) {
             <button className={styles.captureBtn} onClick={handleCapture}>
               <span className={styles.captureBtnInner} />
             </button>
-            <div className={styles.spacer} />
           </div>
         </>
       )}

@@ -23,10 +23,11 @@
 .actions {
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: center;
   width: 100%;
   padding: 24px 16px;
   background: #111;
+  position: relative;
 }
 
 .captureBtn {
@@ -55,16 +56,14 @@
 }
 
 .backBtnSmall {
+  position: absolute;
+  left: 20px;
   background: none;
   border: none;
   color: #fff;
   font-size: 16px;
   cursor: pointer;
   padding: 8px 12px;
-}
-
-.spacer {
-  width: 60px;
 }
 
 .retakeBtn {

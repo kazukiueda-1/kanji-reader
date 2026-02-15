@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import type { RecognizedKanji } from '../types'
 import { loadApiKeys } from '../services/storage'
 import { recognizeText } from '../services/visionApi'
+import { extractKanjiWords } from '../services/claudeApi'
 import MeaningModal from './MeaningModal'
 import styles from './Result.module.css'
 
@@ -14,6 +15,7 @@ interface ResultProps {
 
 function Result({ image, kanjiList, setKanjiList, onBack }: ResultProps) {
   const [loading, setLoading] = useState(true)
+  const [statusText, setStatusText] = useState('よみとりちゅう...')
   const [error, setError] = useState<string | null>(null)
   const [selectedKanji, setSelectedKanji] = useState<RecognizedKanji | null>(null)
 
@@ -32,9 +34,22 @@ function Result({ image, kanjiList, setKanjiList, onBack }: ResultProps) {
       }
 
       try {
-        const result = await recognizeText(image, keys.visionApiKey)
-        setKanjiList(result)
-        if (result.length === 0) {
+        // Step 1: Vision APIでOCR
+        setStatusText('もじをよみとっているよ...')
+        const ocrText = await recognizeText(image, keys.visionApiKey)
+
+        if (!ocrText.trim()) {
+          setError('もじがみつかりませんでした')
+          setLoading(false)
+          return
+        }
+
+        // Step 2: Claude APIで漢字単語を抽出＋読み付与
+        setStatusText('かんじをしらべているよ...')
+        const words = await extractKanjiWords(ocrText, keys.claudeApiKey)
+
+        setKanjiList(words)
+        if (words.length === 0) {
           setError('かんじがみつかりませんでした')
         }
       } catch (e) {
@@ -60,7 +75,7 @@ function Result({ image, kanjiList, setKanjiList, onBack }: ResultProps) {
 
       {loading && (
         <div className={styles.loading}>
-          <p>よみとりちゅう...</p>
+          <p>{statusText}</p>
           <div className={styles.spinner} />
         </div>
       )}
@@ -70,9 +85,9 @@ function Result({ image, kanjiList, setKanjiList, onBack }: ResultProps) {
       {kanjiList.length > 0 && (
         <div className={styles.kanjiList}>
           <p className={styles.instruction}>かんじをタップしてね！</p>
-          {kanjiList.map((k) => (
+          {kanjiList.map((k, i) => (
             <button
-              key={k.character}
+              key={`${k.character}-${i}`}
               className={styles.kanjiItem}
               onClick={() => setSelectedKanji(k)}
             >

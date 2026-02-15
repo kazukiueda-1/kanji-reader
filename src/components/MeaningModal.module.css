@@ -1,0 +1,95 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  z-index: 100;
+}
+
+.modal {
+  background: #fff;
+  border-radius: 24px;
+  padding: 32px 24px;
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.2);
+}
+
+.kanjiDisplay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 24px;
+}
+
+.kanjiChar {
+  font-size: 72px;
+  font-weight: bold;
+  color: #333;
+}
+
+.kanjiReading {
+  font-size: 28px;
+  color: #ff7eb3;
+  font-weight: bold;
+}
+
+.meaningSection {
+  min-height: 80px;
+  margin-bottom: 24px;
+}
+
+.loading {
+  color: #888;
+  font-size: 18px;
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #fad0c4;
+  border-top-color: #ff9a9e;
+  border-radius: 50%;
+  margin: 12px auto;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.error {
+  color: #e74c3c;
+  font-size: 18px;
+}
+
+.meaning {
+  font-size: 22px;
+  line-height: 1.8;
+  color: #444;
+  text-align: left;
+  padding: 0 8px;
+}
+
+.closeBtn {
+  background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+  border: none;
+  border-radius: 20px;
+  padding: 14px 40px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #555;
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+.closeBtn:active {
+  transform: scale(0.95);
+}
